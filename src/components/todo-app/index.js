@@ -17,7 +17,7 @@ function TodoApp() {
   return (
     <div>
         <Header addTodo={addTodo} todos={todos}/>
-        <List/>
+        <List todos={todos}/>
         <Footer/>
       
     </div>

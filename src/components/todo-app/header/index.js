@@ -7,7 +7,7 @@ function Header({addTodo,todos}) {
     
     // todo item add
     const onChange = (e) => {
-        changeTodo({...todo, [e.target.name]: e.target.value});
+        changeTodo({...todo, [e.target.name]: e.target.value.toLowerCase()});
 
     }
     // todo item added to todo list
