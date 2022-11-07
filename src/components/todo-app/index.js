@@ -2,8 +2,8 @@ import { useState } from "react"; // State oluşturabilmek için react kütüpha
 
 //Component'leri gösterebilmek için import ediyoruz;
 import Form from "./header";
-import List from "./List";
-import Footer from "./Footer";
+import List from "./list";
+import Footer from "./footer";
 
 function Components() {
   // Verilerimizi tutabilmek için todos adında array bir state oluşturyoruz. Varsayılan değerine (eğer veri varsa) localstorage üzerinden veri çekiyoruz.
