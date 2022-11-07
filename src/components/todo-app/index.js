@@ -1,27 +1,30 @@
-import {useState} from 'react'
-import List from './list'
-import Header from './header'
-import Footer from './footer'
-function TodoApp() {
-  const [todos, addTodo] = useState([{
-    text:"yemek yap",
-    done:"false"
-  },
-  {
-    text: "ödevi bitir",
-    done: "true"
-  }
-  ]
-  )
-  
+import { useState } from "react"; // State oluşturabilmek için react kütüphanesi altından 'useState' modülünü import ediyoruz.
+
+//Component'leri gösterebilmek için import ediyoruz;
+import Form from "./header";
+import List from "./List";
+import Footer from "./Footer";
+
+function Components() {
+  // Verilerimizi tutabilmek için todos adında array bir state oluşturyoruz. Varsayılan değerine (eğer veri varsa) localstorage üzerinden veri çekiyoruz.
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
+
+  // Listelemede footerdan gelen bilgiyi alabilmek için hide adında string değer tutan bir state oluştuyoruz. Varsayılan değeri 'All'
+  const [hide, setHide] = useState("All");
+
   return (
-    <div>
-        <Header addTodo={addTodo} todos={todos}/>
-        <List todos={todos}/>
-        <Footer/>
-      
+    <div className="todoapp">
+      {/* import ettiğimiz componentleri gösteriyoruz. */}
+      {/* Oluşturduğumuz todos state'tini formumuza gönderiyoruz. */}
+      <Form todos={todos} setTodos={setTodos} />{" "}
+      {/* Footer'dan gelen veriyle listeleme yapabilmek için hide verisini gönderiyoruz. */}
+      <List todos={todos} setTodos={setTodos} hide={hide} />{" "}
+      {/* Footer'a sethide gönderiyoruz ki footer'dan dönen veri ile listeleme yapabilelim */}
+      <Footer todos={todos} setTodos={setTodos} setHide={setHide} />{" "}
     </div>
-  )
+  );
 }
 
-export default TodoApp
+export default Components;

@@ -3,7 +3,7 @@ import {useState} from 'react'
 
     
 function Header({addTodo,todos}) {
-    const [todo, changeTodo] = useState({text:"", done:"false"})
+    const [todo, changeTodo] = useState({text:"", done:false})
     
     // todo item add
     const onChange = (e) => {
