@@ -1,54 +1,70 @@
-import {useState}from 'react'
+import React from "react";
 
-function List({todos, addTodo}) {
-  const array = todos.map((item)=> item.done)
-  const [checkedStatus,changeChecked] = useState(array)
-  console.log(checkedStatus)
-  const changeCheckedStatus = (e)=>{
-    
-    changeChecked(checkedStatus.map((item, index) => index === e ? !item : item ));
-  }
-  const deleteListItem = (e) => {
-    const index = e.target.name
-    const filtered = todos.filter((i)=> i.text !== index);
-    console.log(index,filtered)
-    addTodo(filtered)
-    } 
-  const toggle = (e) =>{
-   changeChecked( checkedStatus.map((element, index) => checkedStatus.includes(false) ? element = true : element = false
-    )     
-   ) 
-   
-  }
-  
+// Components içerisinden göndermiş olduğumuz state'in verilerini çağırıyoruz.
+function List({ todos, setTodos, hide }) {
+  // todos içersinden oluşturduğumuz id sayesinde map içesinde id karşılaştırması yapıyoruz.
+  const checkTodo = (e) => {
+    // Uyumlu id'yi bulduktan sonra işaretli olma durumunu(checked) değiştiriyoruz.
+    let newTodos = todos.map((todo) => {
+      if (parseInt(todo.id) === parseInt(e.target.id)) {
+        // id'ler eşleşebilsin diye parseInt kullanarak integera çevirdik.
+        return { ...todo, checked: !todo.checked };
+      }
+      return todo;
+    });
+    setTodos(newTodos); // işaretli olma durumunu set ediyoruz.
+  };
+
+  const deleteTodo = (e) => {
+    setTodos(
+      todos.filter((todo) => parseInt(todo.id) !== parseInt(e.target.id))
+    ); // id karşılaştırması yaparak filtreleme yapıyoruz.
+  };
+
+  const isComplated = (e) => {
+    // Event olarak gelen verinin işaretli olma durumuna göre ve footerdan gelen veriye göre listeleme yapıyoruz.
+    // hidden classı atandığında dom listede görünmüyor.
+    if (e.checked === true && hide === "All") {
+      return "completed";
+    } else if (e.checked === true && hide === "Active") {
+      return "completed hidden";
+    } else if (e.checked === false && hide === "Completed") {
+      return "hidden";
+    }
+  };
+
   return (
-    <div className='main'>
-       <input
-       onChange={toggle}        type="checkbox" />
+    <div className="main">
+      <input className="toggle-all" type="checkbox" />
+      <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className='todo-list'>
-            {todos.map((item, key) => {
-              
-              return <li key={key} className="list-item"> 
-              <div className={checkedStatus[key]? "completed" : " not-completed"}>
-                  <label htmlFor={item.text}>
-                    <input 
-                    name={item.text} 
-                    onChange= {() =>changeCheckedStatus(key)}
-                    checked={checkedStatus[key]}
-                    type="checkbox"/>
-                   {item.text}
-                   </label>
-                  <button name={item.text} onClick={deleteListItem}className='destroy'>Delete</button>
-
-              </div>
+      <ul className="todo-list">
+        {todos.map((todo) => (
+          // todos map ederek gelen veriler ile liste elemanlarımızı oluşturuyoruz.
+          <li key={todo.id} id={todo.id} className={isComplated(todo)}>
+            {/* isComplated ile state elemanımızı göndererek classlarımızı belirliyoruz. */}
+            <div className="view">
+              <input
+                className="toggle"
+                type="checkbox"
+                defaultChecked={todo.checked}
+                id={todo.id}
+                onClick={checkTodo}
+                // işaretlenme durumu değiştiğinde id kullanarak veriyi state'e set ediyoruz.
+              />
+              <label>{todo.todo}</label>
+              <button
+                className="destroy"
+                id={todo.id}
+                onClick={deleteTodo}
+                // Silmek için butona basıldığında id yardımı ile state'den veriyi sildiriyoruz.
+              ></button>
+            </div>
           </li>
-            })}
-        </ul>
-      
+        ))}
+      </ul>
     </div>
-  )
+  );
 }
 
-export default List
+export default List;
